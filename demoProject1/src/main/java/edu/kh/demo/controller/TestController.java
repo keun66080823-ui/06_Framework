@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 // bean : Spring Container가 만들고, 관리하는 객체
 
+
 // IOC (제어의 반전) : 객체의 생성 및 생명주기의 권한이 개발자가 아닌,
 //					   프레임워크에게 있다
 
@@ -59,7 +60,6 @@ public class TestController {
 		 * classpath:	==	src/main/resources
 		 * 접두사 : classpath:/templates/
 		 * 접미사 : .html
-		 * 
 		 * 
 		 * */
 		
