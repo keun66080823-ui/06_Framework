@@ -8,6 +8,9 @@
 
 
 <body>
+  <!-- templates 폴더 기준 -->
+  <th:block th:replace="~{fragments/header}"></th:block>
+
   <h1>thymeleaf</h1>
   <h3>1. 템플릿 엔진</h3>
  <pre>
@@ -55,5 +58,8 @@
    </li>
  </ol>
 
+ <th:block th:replace="~{fragments/footer :: footer1}"></th:block>
+
 </body>
+
 </html>
