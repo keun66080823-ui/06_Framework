@@ -59,6 +59,19 @@ UPDATE "MEMBER" SET
 MEMBER_PW = '$2a$10$nfGb86TM/w47uc3ZAQZ0jef5ZD2OvBx/3/8zkgJLnwecrtZHz2ucu'
 WHERE MEMBER_NO = 1;
 
+-- 로그인 SQL
+SELECT MEMBER_NO, MEMBER_EMAIL, MEMBER_PW, 
+MEMBER_NICKNAME, MEMBER_TEL, MEMBER_ADDRESS,
+PROFILE_IMG, AUTHORITY,
+TO_CHAR(ENROLL_DATE, 
+'YYYY"년" MM"월" DD"일" HH24"시" MI"분" SS"초"') 
+ENROLL_DATE
+FROM "MEMBER"
+WHERE MEMBER_EMAIL = 'user01@kh.or.kr'
+AND MEMBER_DEL_FL = 'N';
+
+
+
 -----------------------------------------
 
 /* 이메일, 인증키 저장 테이블 생성 */
