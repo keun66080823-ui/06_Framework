@@ -68,5 +68,49 @@ public class MemberServiceImpl implements MemberService{
 		return mapper.checkNickname(memberNickname);
 	}
 	
+	// 회원가입 서비스
+	@Override
+	public int signup(Member inputMember, String[] memberAddress) {
+		
+		// 1. 주소 배열 -> 하나의 문자열로 가공
+		// 주소가 입력되지 않으면
+		// inputMember.getMemberAddress() -> ",,"
+		// memberAddress -> [,,]
+		
+		// 주소가 입력된 경우
+		if(!inputMember.getMemberAddress().equals(",,")) {
+			// String.join("구분자", 배열)
+			// -> 배열의 모든 요소 사이에 "구분자"를 추가하여
+			//	  하나의 문자열로 만들어 반환하는 메서드
+			
+			String address = String.join("^^^", memberAddress);
+			// "12345^^^서울시중구^^^3층,302호" // 순서대로 우편번호,주소,상세주소이다.
+			
+			// inputMember의 주소값을 위에서 만든 주소로 세팅
+			inputMember.setMemberAddress(address);
+			
+		} else {
+			// 주소가 입력되지 않은 경우
+			inputMember.setMemberAddress(null); // DB상 memberAddress를 null로 저장(세팅)
+		}
+		
+		// 2. 비밀번호 암호화(평문으로 넘어왔기에 암호화하여 DB로 보내야 한다)
+		// inputMember 안의 memberPw -> 평문
+		// 비밀번호를 암호화하여 inputMember에 세팅
+		String encPw = bcrypt.encode(inputMember.getMemberPw());
+		inputMember.setMemberPw(encPw);
+		
+		// 회원 가입 매퍼 메서드 호출
+		return mapper.signup(inputMember);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
