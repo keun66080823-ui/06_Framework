@@ -1,5 +1,7 @@
 package edu.kh.project.myPage.model.service;
 
+import java.util.Map;
+
 import edu.kh.project.member.model.dto.Member;
 
 public interface MyPageService {
@@ -10,5 +12,18 @@ public interface MyPageService {
 	 * @return
 	 */
 	int updateInfo(Member inputMember, String[] memberAddress);
+
+	/** 비밀번호 변경
+	 * @param currentPw
+	 * @param newPw
+	 * @param memberNo
+	 * @return
+	 */
+	int chagePw(String currentPw, String newPw, int memberNo);
+
+	
+
+	
+	
 
 }

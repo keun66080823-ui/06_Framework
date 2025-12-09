@@ -1,5 +1,7 @@
 package edu.kh.project.myPage.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -149,12 +151,33 @@ public class MyPageController {
 		
 	}
 	
-	
-	
-	
-	
-	
-	
+	@PostMapping("changePw") //	/myPage/changePw POST 방식 요청 매핑
+	public String changePw(Map<String, String> pw,
+						@SessionAttribute("loginMember") Member loginMember,
+						RedirectAttributes ra) {
+		
+		String currentPw = pw.get("currentPw");
+		String newPw = pw.get("newPw");
+		String newPwConfirm = pw.get("newPwConfirm");
+		
+		String message = null;
+		String path = null;
+		
+		int memberNo = loginMember.getMemberNo();
+		
+		int result = service.chagePw(currentPw, newPw, memberNo);
+		
+		if(result > 0) {
+			message = "비밀번호가 변경되었습니다";
+			path = "info";
+		} else {
+			message = "현재 비밀번호가 일치하지 않습니다";
+			path = "changePw";
+		}
+		
+		
+		return "redirect:" + path;
+	}
 	
 	
 	
