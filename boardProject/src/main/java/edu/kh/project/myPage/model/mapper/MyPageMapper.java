@@ -47,6 +47,12 @@ public interface MyPageMapper {
 	 * @return
 	 */
 	List<UploadFile> fileList(int memberNo);
+
+	/** 프로필 이미지를 변경하는 SQL
+	 * @param member
+	 * @return
+	 */
+	int profile(Member member);
 	
 
 

@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Transactional(rollbackFor = Exception.class)
 @Slf4j
+@PropertySource("classpath:/config.properties")
 public class MyPageServiceImpl implements MyPageService{
 
 	@Autowired
@@ -27,6 +30,12 @@ public class MyPageServiceImpl implements MyPageService{
 	// BCrypt 암호화
 	@Autowired
 	private BCryptPasswordEncoder bcrypt;
+	
+	@Value("${my.profile.web-path}")
+	private String profileWebPath;	//	/myPage/profile/
+	
+	@Value("${my.profile.folder-path}")
+	private String profileFolderPath; // C:/uploadFiles/profile/
 	
 	// 회원 정보 수정
 	@Override
@@ -89,6 +98,12 @@ public class MyPageServiceImpl implements MyPageService{
 		// 같은 경우
 		return mapper.secession(memberNo);
 	}
+	
+	
+	
+	
+	
+	
 	
 	
 	// 파일 업로드 테스트 1
@@ -176,16 +191,94 @@ public class MyPageServiceImpl implements MyPageService{
 		return result; // 성공 시 1
 	}
 	
-	
-	
-	
-	
-	
-	
 	// 파일 목록 조회 서비스
 	@Override
 	public List<UploadFile> fileList(int memberNo) {
 		return mapper.fileList(memberNo);
+	}
+	
+	// 파일 업로드 서비스
+	@Override
+	public int fileUpload3(List<MultipartFile> aaaList,
+						List<MultipartFile> bbbList,
+						int memberNo) throws Exception {
+		
+		// 1. aaaList 처리
+		int result1 = 0; 
+		
+		// 업로드된 파일이 없을 경우를 제외하고 업로드
+		for(MultipartFile file : aaaList) {
+			
+			if(file.isEmpty()) { // 파일이 없으면 다음 파일
+				continue; // 아래 코드는 더이상 수행하지 않고 다음 반복으로 넘어감.
+			}
+			
+			// fileUpload2() 메서드 호출(재활용)
+			// -> 파일 하나 업로드 + DB INSERT
+			result1 += fileUpload2(file, memberNo);
+			
+		}
+		
+		// 2. bbbList 처리
+		int result2 = 0;
+		
+		for(MultipartFile file : bbbList) {
+			
+			if(file.isEmpty()) continue;
+			
+			result2 += fileUpload2(file, memberNo);
+		}
+		
+		return result1 + result2;
+	}
+	
+	// 프로필 이미지 변경 서비스
+	@Override
+	public int profile(MultipartFile profileImg, Member loginMember) throws Exception {
+		
+		// 프로필 이미지 경로 (수정할 경로)
+		String updatePath = null;
+		
+		// 변경명 저장
+		String rename = null;
+		
+		// 업로드한 이미지가 있을 경우
+		if( !profileImg.isEmpty() ) {
+			// updatePath 경로 조합 
+			
+			// 1. 파일명 변경
+			rename = Utility.fileRename(profileImg.getOriginalFilename()); // 오늘날짜기반으로 만들어진 파일명 값을 반환
+			
+			// 2. /myPage/profile/변경된파일명
+			updatePath = profileWebPath + rename;
+		}
+		
+		// 수정된 프로필 이미지 경로 + 회원 번호 저장할 DTO 객체
+		Member member = Member.builder()
+						.memberNo(loginMember.getMemberNo())
+						.profileImg(updatePath)
+						.build();
+		
+		// UPDATE 수행
+		int result = mapper.profile(member);
+		
+		if(result > 0) { // DB에 업데이트 성공
+			
+			// 프로필 이미지를 없앤 경우(NULL로 수정한 경우)를 제외
+			// -> 업로드한 이미지가 있을 경우
+			if( !profileImg.isEmpty() ) {
+				// 파일을 서버 지정된 폴더에 저장
+				profileImg.transferTo(new File(profileFolderPath + rename));
+								// C:/uploadFiles/profile/변경한이름
+			}
+			
+			// 세션에 등록된 현재 로그인한 회원 정보에서
+			// 프로필 이미지 경로를 DB에 업데이트한 경로로 변경
+			loginMember.setProfileImg(updatePath);
+			
+		}
+		
+		return result;
 	}
 	
 	
@@ -194,5 +287,9 @@ public class MyPageServiceImpl implements MyPageService{
 	
 	
 	
-
+	
+	
+	
+	
+	
 }

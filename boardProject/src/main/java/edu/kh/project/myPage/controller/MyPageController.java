@@ -318,9 +318,61 @@ public class MyPageController {
 		return "redirect:/myPage/fileTest";
 	}
 	
+	@PostMapping("file/test3") // /myPage/file/test3 POST 요청 매핑
+	public String fileUpload3(@RequestParam("aaa") List<MultipartFile> aaaList,
+							@RequestParam("bbb") List<MultipartFile> bbbList,
+							@SessionAttribute("loginMember") Member loginMember,
+							RedirectAttributes ra) throws Exception{
+		
+		// aaa 파일 미제출 시
+		// 0번, 1번 인덱스로 구성 - 파일은 모두 비어있음
+		//log.debug("aaaList: "+ aaaList); // console창에 [요소, 요소] 로 나옴
+		
+		// bbb(multiple) 파일 미제출 시
+		// 0번 인덱스로 구성 - 파일이 비어있음
+		//log.debug("bbbList: "+ bbbList); // [요소]
+		
+		// 여러 파일을 업로드 할 수 있는 서비스 호출
+		
+		int result = service.fileUpload3(aaaList, bbbList, loginMember.getMemberNo());
+		
+		// result == aaaList와 bbbList에 업로드된 파일 갯수
+		
+		String message = null;
+		
+		if(result == 0) {
+			message = "업로드된 파일이 없습니다";
+			
+		} else {
+			message = result + "개의 파일이 업로드 되었습니다!";
+			
+		}
+		
+		ra.addFlashAttribute("message", message);
+		
+		return "redirect:/myPage/fileTest";
+	}
 	
-	
-	
+	@PostMapping("profile") //	/myPage/profile POST 요청 매핑
+	public String profile(@RequestParam("profileImg") MultipartFile profileImg,
+						@SessionAttribute("loginMember") Member loginMember,
+						RedirectAttributes ra) throws Exception {
+		
+		// 서비스 호출
+		int result = service.profile(profileImg, loginMember); // 타 메서드와 달리 memberNo만 보내는 게 아니라 loginMember 전체를 보냄
+		
+		String message = null;
+		
+		if(result > 0) {
+			message = "변경 성공!";
+		} else {
+			message = "변경 실패ㅠㅠ";
+		}
+		
+		ra.addFlashAttribute("message", message);
+		
+		return "redirect:profile"; // 상대경로로 리다이렉트 - /myPage/profile GET 요청
+	}
 	
 	
 	
