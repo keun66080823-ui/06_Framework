@@ -41,7 +41,7 @@
           </thead>
 
           <tbody>
-            <tr th:each="file : ${list}" th:object="${file}">
+            <tr th:each="file : ${list}" th:object="${file}"> <!-- ${list}에 List<UploadFile> 형태로 들어감 -->
 
               <td th:text="*{fileNo}">파일 번호</td>
 
@@ -57,6 +57,7 @@
               <td th:text="*{fileUploadDate}">업로드 날짜</td>
 			  
               <td>
+                <!-- /myPage/file/20251211103446_00001.jfif -->
                 <img th:src="|*{filePath}*{fileRename}|" alt="이미지" height="100px;">
               </td>
             </tr>

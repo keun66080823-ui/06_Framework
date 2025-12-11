@@ -73,7 +73,6 @@ AND MEMBER_DEL_FL = 'N';
 
 
 
-
 -----------------------------------------
 
 /* 이메일, 인증키 저장 테이블 생성 */
@@ -237,7 +236,7 @@ ALTER TABLE "MEMBER" ADD CONSTRAINT "PK_MEMBER" PRIMARY KEY (
 
 ALTER TABLE "UPLOAD_FILE" ADD CONSTRAINT "PK_UPLOAD_FILE" PRIMARY KEY (
 	"FILE_NO"
-);
+); -- 수행함
 
 ALTER TABLE "BOARD" ADD CONSTRAINT "PK_BOARD" PRIMARY KEY (
 	"BOARD_NO"
@@ -262,13 +261,13 @@ ALTER TABLE "COMMENT" ADD CONSTRAINT "PK_COMMENT" PRIMARY KEY (
 
 -------------------- FK -------------------------
 
-
+-- FK 제약조건을 MEMBER_NO에 걸고, UPLOAD_FILE(자식)이 MEMBER(부모) 테이블을 상속받는다.
 ALTER TABLE "UPLOAD_FILE" ADD CONSTRAINT "FK_MEMBER_TO_UPLOAD_FILE_1" FOREIGN KEY (
 	"MEMBER_NO"
 )
 REFERENCES "MEMBER" (
 	"MEMBER_NO"
-);
+); -- 수행함
 
 
 
