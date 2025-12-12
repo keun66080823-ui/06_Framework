@@ -197,7 +197,7 @@ public class MyPageServiceImpl implements MyPageService{
 		return mapper.fileList(memberNo);
 	}
 	
-	// 파일 업로드 서비스
+	// 파일 업로드 서비스 (여러 파일 업로드)
 	@Override
 	public int fileUpload3(List<MultipartFile> aaaList,
 						List<MultipartFile> bbbList,
