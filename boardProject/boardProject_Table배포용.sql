@@ -166,6 +166,9 @@ COMMIT;
 -- 수행함
 
 
+
+
+
 ------------------------------------------
 
 
@@ -404,13 +407,45 @@ BEGIN
 END;
 ROLLBACK;
 COMMIT;
-DROP SEQUENCE SEQ_BOARD_NO;
-DELETE FROM "BOARD";
-SELECT * FROM "BOARD";
+
+
+
+
+SELECT * FROM "BOARD"
+WHERE BOARD_CODE = 1
+ORDER BY board_no DESC;
+
+-- 번호 / 제목[댓글개수] / 작성자닉네임 / 작성일 / 조회수 / 좋아요갯수 -- 댓글개수, 작성일, 좋아요갯수 조회 방법이 중요!
+SELECT BOARD_NO, BOARD_TITLE, MEMBER_NICKNAME, READ_COUNT,
+(SELECT COUNT(*)
+FROM "COMMENT" C
+WHERE C.BOARD_NO = B.BOARD_NO) COMMENT_COUNT, -- 댓글개수
+(SELECT COUNT(*)
+FROM "BOARD_LIKE" L
+WHERE L.BOARD_NO = B.BOARD_NO) LIKE_COUNT, -- 좋아요갯수
+CASE
+	WHEN SYSDATE - BOARD_WRITE_DATE < 1 / 24 / 60 -- 1분이 안 지났을 경우
+	THEN FLOOR((SYSDATE - BOARD_WRITE_DATE) 
+	* 24 * 60 * 60) || '초 전'
+	
+	WHEN SYSDATE - BOARD_WRITE_DATE < 1 / 24 -- 1시간이 안 지났을 경우
+	THEN FLOOR((SYSDATE - BOARD_WRITE_DATE)
+	* 24 * 60) || '분 전'
+	
+	WHEN SYSDATE - BOARD_WRITE_DATE < 1 -- 24시간이 안 지났을 경우
+	THEN FLOOR((SYSDATE - BOARD_WRITE_DATE)
+	* 24) || '시간 전'
+	
+	ELSE TO_CHAR(BOARD_WRITE_DATE, 'YYYY-MM-DD')
+END
+FROM "BOARD" B
+JOIN "MEMBER" USING(MEMBER_NO)
+WHERE BOARD_DEL_FL = 'N'
+ORDER BY BOARD_NO DESC;
+
+
 
 ---------------------------------------------------
--- 부모 댓글 번호 NULL 허용
-
 
 /* 댓글 번호 시퀀스 생성 */
 CREATE SEQUENCE SEQ_COMMENT_NO NOCACHE;
@@ -431,10 +466,16 @@ BEGIN
 		);
 	END LOOP;
 END;
+
 COMMIT;
 SELECT COUNT(*) FROM "COMMENT";
 
--- 수행함
+-- 수행함 
+
+
+
+
+
 
 -----------------------------------------------------
 

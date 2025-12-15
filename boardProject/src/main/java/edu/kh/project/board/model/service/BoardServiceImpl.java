@@ -1,13 +1,17 @@
 package edu.kh.project.board.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.kh.project.board.model.dto.Board;
+import edu.kh.project.board.model.dto.Pagination;
 import edu.kh.project.board.model.mapper.BoardMapper;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,7 +29,7 @@ public class BoardServiceImpl implements BoardService{
 	}
 	
 	// 특정 게시판의 지정된 페이지 목록 조회 서비스
-	@Override
+	@Override									//게시판 구별,  해당 페이지(CurrentPage)
 	public Map<String, Object> selectBoardList(int boardCode, int cp) {
 		
 		// 1. 지정된 게시판(boardCode)에서
@@ -35,14 +39,34 @@ public class BoardServiceImpl implements BoardService{
 		// 2. 1번의 결과(삭제되지 않은 게시글 수) + cp를 이용해서
 		// Pagination 객체를 생성
 		// * Pagination 객체 : 게시글 목록 구성에 필요한 값을 저장한 객체
+		Pagination pagination = new Pagination(cp, listCount);
 		
-		// 3. 특정 게시판의 지정된 페이지 목록 조회
+		// 3. 특정 게시판의 지정된 페이지 목록 조회(내가 누른 페이지에 보이는 게시글)
+		/* ROWBOUNDS 객체 (MyBatis 제공 객체)
+		 * - 지정된 크기 만큼 건너뛰고 (offset)
+		 * 	 제한된 크기만큼(limit)의 행을 조회하는 객체
+		 * 
+		 * --> 페이징 처리가 굉장히 간단해짐
+		 * 
+		 * */
+		int limit = pagination.getLimit(); // 한 페이지에 보이는 게시글의 한계를 10개로 가져옴
+		int offset = (cp - 1) * limit; // 얼마나 건너뛰고 게시글 객체를 가져올 지 정하는 공식(예: 현재 2페이지면 10개 건너뛰고 11~20번째 게시글을 조회함)
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		// Mapper 메서드 호출 시 원래 전달할 수 있는 매개변수는 1개지만,
+		// 2개를 전달할 수 있는 경우가 있다.
+		// 그게 바로 RowBounds를 이용할 때다.
+		// 1번째 매개변수 -> SQL에 전달할 파라미터
+		// 2번째 매개변수 -> RowBounds 객체
+		List<Board> boardList = mapper.selectBoardList(boardCode, rowBounds); // 반드시 rowBounds를 두번째 매개변수 자리에 써야한다.
 		
 		// 4. Pagination 객체 + 목록 조회 결과를 Map으로 묶음
+		Map<String, Object> map = new HashMap<>();
+		map.put("pagination", pagination);
+		map.put("boardList", boardList);
 		
 		// 5. map 반환
-		
-		return null;
+		return map;
 	}
 	
 }

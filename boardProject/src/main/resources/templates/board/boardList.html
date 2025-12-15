@@ -15,24 +15,19 @@
 
 <body>
 	<main>
-
 		<th:block th:replace="~{common/header}"></th:block>
-
 
 		<section class="board-list">
 
-			<th:block th:each="boardType : ${application.boardTypeList}">
-				
+			<th:block th:each="boardType : ${application.boardTypeList}"> <!-- 어플리케이션 스코프에 boardTypeList(Key)의 Value값으로[{boardCode=1, boardName=공지게시판}, ...] 이 존재-->
 				<h1 class="board-name"
 					th:if="${boardType.boardCode} == ${boardCode}"
-					th:text="${boardType.boardName}"
-				>게시판 이름</h1>
-				
+					th:text="${boardType.boardName}">
+					게시판 이름</h1>
 			</th:block>
 
 			<div class="list-wrapper">
 				<table class="list-table">
-
 					<thead>
 						<tr>
 							<th>글번호</th>
@@ -57,7 +52,7 @@
 							</tr>
 						</th:block>
 
-						<!-- 게시글이 존재할 때 -->
+						<!-- 게시글이 존재할 때 (비어있지 않을 때) -->
 						<th:block th:unless="${#lists.isEmpty(boardList)}">
 							
 							<tr th:each="board, iterStat : ${boardList}" th:object="${board}">
@@ -67,7 +62,6 @@
 									<!-- 썸네일 추가 예정 -->
 									
 									<!-- 상세 조회 주소에 cp가 포함된 이유 : 상세 -> 목록으로 돌아올 때 사용 -->
-									
 									
 									<!-- 검색 X -->
 									<a th:unless="${param.key}"
@@ -108,7 +102,6 @@
 				<button id="insertBtn" th:if="${session.loginMember}">글쓰기</button>
 			</div>
 
-
 			<!-- ============================================================================================================== -->
 
 			<!-- 게시글이 있을 때만 페이지네이션이 보이게 할 예정 -->
@@ -118,14 +111,14 @@
 				<ul class="pagination" th:unless="${param.key}" th:object="${pagination}" >
 
 					<!-- 첫 페이지로 이동 -->
-					<li><a th:href="@{/board/{boardCode}(boardCode=${boardCode}, cp=1)}">&lt;&lt;</a></li>
+					<li><a th:href="@{/board/{boardCode}(boardCode=${boardCode}, cp=1)}">&lt;&lt;</a></li> <!-- &lt;&lt;는 " << " 과 같다. -->
 
 					<!-- 이전 목록 마지막 번호로 이동 -->
-					<li><a th:href="@{/board/{boardCode}(boardCode=${boardCode}, cp=*{prevPage})}">&lt;</a></li>
+					<li><a th:href="@{/board/{boardCode}(boardCode=${boardCode}, cp=*{prevPage})}">&lt;</a></li> <!-- &lt;는 < 와 같은 형태다. -->
 
 					<!-- 특정 페이지로 이동 -->
 					
-					<th:block th:each="i : *{#numbers.sequence(startPage, endPage)}">
+					<th:block th:each="i : *{#numbers.sequence(startPage, endPage)}"> <!-- [1,2,3,4,5,6,7,8,9,10] 처럼 나온다. -->
 						
 						<!-- 현재 보고있는 페이지 -->
 						<li th:if="${i} == *{currentPage}">
@@ -135,7 +128,7 @@
 						<!-- 보고있지 않은 페이지 -->
 						<li th:unless="${i} == *{currentPage}">
 							<a th:href="@{/board/{boardCode}(boardCode=${boardCode}, cp=${i})}" 
-								th:text="${i}">이동할 페이지</a>
+							th:text="${i}">이동할 페이지</a>
 						</li>
 					</th:block>
 						
