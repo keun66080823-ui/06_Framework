@@ -163,13 +163,5 @@ public class Pagination {
 		} else {
 			nextPage = endPage + 1; // 다음 페이지의 일의 단위가 1인 곳으로 이동
 		}
-		
-		
-		
-		
-	}
-	
-	
-	
-		
+	}	
 }

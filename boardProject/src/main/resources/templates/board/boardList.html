@@ -118,7 +118,7 @@
 
 					<!-- 특정 페이지로 이동 -->
 					
-					<th:block th:each="i : *{#numbers.sequence(startPage, endPage)}"> <!-- [1,2,3,4,5,6,7,8,9,10] 처럼 나온다. -->
+					<th:block th:each="i : *{#numbers.sequence(startPage, endPage)}"> <!-- [1,2,3,4,5,6,7,8,9,10] 와 같이 배열 형태로 나온다. -->
 						
 						<!-- 현재 보고있는 페이지 -->
 						<li th:if="${i} == *{currentPage}">
@@ -133,15 +133,16 @@
 					</th:block>
 						
 					<!-- 다음 목록 시작 번호로 이동 -->
-					<li><a th:href="@{/board/{boardCode}(boardCode=${boardCode}, cp=*{nextPage})}">&gt;</a></li>
+					<li><a th:href="@{/board/{boardCode}(boardCode=${boardCode}, cp=*{nextPage})}">&gt;</a></li> <!-- &gt; == > -->
 
 					<!-- 끝 페이지로 이동 -->
-					<li><a th:href="@{/board/{boardCode}(boardCode=${boardCode}, cp=*{maxPage})}">&gt;&gt;</a></li>
+					<li><a th:href="@{/board/{boardCode}(boardCode=${boardCode}, cp=*{maxPage})}">&gt;&gt;</a></li> 
 				</ul>
 
 
 				<!-- 검색인 경우 -->
 				<ul class="pagination"  th:if="${param.key}" th:object="${pagination}">
+
 
 					<!-- 첫 페이지로 이동 -->
 					<li><a th:href="@{/board/{boardCode}(boardCode=${boardCode}, cp=1, key=${param.key}, query=${param.query})}">&lt;&lt;</a></li>
@@ -178,6 +179,13 @@
 					<li><a th:href="@{/board/{boardCode}(boardCode=${boardCode}, cp=*{maxPage}, key=${param.key}, query=${param.query})}">&gt;&gt;</a></li>
 				</ul>
 			</div>
+
+
+
+
+
+
+
 
 
 

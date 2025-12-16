@@ -49,7 +49,7 @@
  
       <th:block th:each="boardType : ${application.boardTypeList}">
         <li>
-          <a th:href="@{/board/{boardCode}(boardCode=${boardType.boardCode})}" 
+          <a th:href="@{/board/{boardCode}(boardCode=${boardType.boardCode})}"
           th:text="${boardType.boardName}">게시판이름</a>
         </li>      
       </th:block>
