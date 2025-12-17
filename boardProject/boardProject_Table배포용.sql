@@ -550,6 +550,35 @@ VALUES( SEQ_COMMENT_NO.NEXTVAL, '부모 2의 자식 1의 자식!!!',
 			 
 COMMIT;
 
+SELECT * FROM "COMMENT"
+WHERE BOARD_NO = 2001
+ORDER BY COMMENT_NO;
+
+-- 계층형쿼리(상세 조회한 게시글의 댓글 목록 조회)
+SELECT LEVEL, C.* FROM
+(SELECT COMMENT_NO, COMMENT_CONTENT,
+TO_CHAR(COMMENT_WRITE_DATE, 'YYYY"년" MM"월" DD"일" HH24"시" MI"분" SS"초"') COMMENT_WRITE_DATE,
+BOARD_NO, MEMBER_NO, MEMBER_NICKNAME, PROFILE_IMG, PARENT_COMMENT_NO, COMMENT_DEL_FL
+FROM "COMMENT"
+JOIN MEMBER USING(MEMBER_NO)
+WHERE BOARD_NO = 2001) C
+WHERE COMMENT_DEL_FL = 'N' -- 댓글이 삭제되지 않았거나 
+OR 0 != (SELECT COUNT(*) FROM "COMMENT" SUB			-- 자식 댓글 중 삭제되지 않은 게 하나라도 있다면 부모 댓글이 삭제되었어도 '삭제된 게시글입니다'라고 뜨고 자식은 멀쩡하게 보임 
+		WHERE SUB.PARENT_COMMENT_NO = C.COMMENT_NO
+		AND COMMENT_DEL_FL = 'N')
+-- 자식 댓글 중 삭제되지 않은 행이 하나라도 있으면 부모 댓글을 조회 대상에 포함
+-- 현재 댓글(C.COMMENT_NO)을 부모로 하는 자식 댓글 중
+-- 삭제되지 않은 댓글의 행의 갯수 카운트
+--> 삭제되지 않은 댓글이거나, 삭제된 댓글이라도 그 아래에 활성 상태의 자식 댓글이
+-- 존재하면 조회되도록 하는 목적의 SQL
+START WITH PARENT_COMMENT_NO IS NULL
+CONNECT BY PRIOR COMMENT_NO = PARENT_COMMENT_NO
+ORDER SIBLINGS BY COMMENT_NO;
+
+SELECT * FROM "BOARD_IMG"
+WHERE BOARD_NO = 2000
+ORDER BY IMG_ORDER;
+
 -------------------------------------------------------
 
 /* 좋아요 테이블(BOARD_LIKE) 샘플 데이터 추가 */

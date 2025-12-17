@@ -111,10 +111,29 @@ public class BoardServiceImpl implements BoardService{
 		//		   나중에 수행되는 SQL의 조건으로 삼을 수 있는 경우
 		// -> MyBatis의 <resultMap>, <collection> 태그를 이용해서
 		// Mapper 메서드 1회 호출만으로 여러 SELECT 한번에 수행 가능
+		
+		
+		
+		
+		
+		
 		return mapper.selectOne(map);
 	}
 	
-	
-	
+	// 조회수 1 증가
+	@Override
+	public int updateReadCount(int boardNo) {
+		
+		// 1. 조회 수 1 증가 (UPDATE)
+		int result = mapper.updateReadCount(boardNo);
+		
+		// 2. 현재 조회 수 조회
+		if(result > 0) {
+			return mapper.selectReadCount(boardNo);
+		}
+		
+		// UPDATE에 실패한 경우 -1 반환
+		return -1;
+	}
 	
 }
