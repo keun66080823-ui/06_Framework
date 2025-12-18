@@ -1,11 +1,15 @@
 package edu.kh.project.member.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -174,13 +178,11 @@ public class MemberController {
 		if(result > 0) { // 성공 시
 			message = inputMember.getMemberNickname() 
 						+ "님의 가입을 환영합니다!";
-			
 			path = "/";
 			
 		} else { // 실패 시
 			message = "회원 가입 실패...";
 			path = "signup";
-			
 		}
 		
 		ra.addFlashAttribute("message", message);
@@ -192,7 +194,30 @@ public class MemberController {
 		// 목표경로 : /member/signup (Get 방식 요청)
 	}
 	
-	
+	// 회원 목록 조회(비동기)
+		@ResponseBody
+		@GetMapping("selectMemberList")
+		public List<Member> selectMemberList() {
+
+			// (java)List
+			// (Spring) HttpMessageConverter가 JSON Array(문자열)로 변경
+			// -> (JS) response => response.json() -> JS 객체 배열
+			return service.selectMemberList();
+		}
+
+		// 회원 비밀번호 초기화(pass01!)(비동기)
+		@ResponseBody
+		@PutMapping("resetPw")
+		public int resetPw(@RequestBody int inputNo) {
+			return service.resetPw(inputNo);
+		}
+
+		// 회원 탈퇴 복구(비동기)
+		@ResponseBody
+		@PutMapping("restoreMember")
+		public int restoreMember(@RequestBody int inputNo) {
+			return service.restoreMember(inputNo);
+		}
 	
 	
 	
