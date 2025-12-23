@@ -163,4 +163,10 @@ public class BoardServiceImpl implements BoardService{
 		return -1;
 	}
 	
+	@Override
+	public List<String> selectDbImageList() {
+		// TODO Auto-generated method stub
+		return mapper.selectDbImageList();
+	}
+	
 }

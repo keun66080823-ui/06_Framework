@@ -12,6 +12,7 @@
 </head>
 <body>
     <main>
+        
         <th:block th:replace="~{common/header}"></th:block>
 
         <form action="update" th:object="${board}" method="POST" 
@@ -25,9 +26,6 @@
                         placeholder="제목" 
                         th:value="${board.boardTitle}">   
             </h1>
-
-
-
 
             <!-- 썸네일 영역 -->
             <h5>썸네일</h5>
@@ -90,7 +88,6 @@
             <div class="board-btn-area">
                 <button type="submit" id="writebtn">등록</button>
             </div>
-
             
             <!-- 수정 성공 시 주소(쿼리스트링) 유지용도 -->
             <input type="hidden" name="cp" th:value="${param.cp}">
@@ -102,6 +99,7 @@
     <th:block th:replace="~{common/footer}"></th:block>
 
     <script th:src="@{/js/board/boardUpdate.js}"></script>
+
 
 
     <!-- 이미지 미리보기 설정 -->
@@ -122,4 +120,5 @@
     </script>
 
 </body>
+
 </html>

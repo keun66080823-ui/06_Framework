@@ -55,10 +55,9 @@ public class MemberController {
 						RedirectAttributes ra,
 						Model model,
 						@RequestParam(value="saveId", required = false) String saveId,
-						HttpServletResponse resp) {
+						HttpServletResponse resp) throws Exception{
 		
 		// 로그인 서비스 호출
-		try {
 			Member loginMember = service.login(inputMember);
 			
 			log.debug("loginMember : " + loginMember);
@@ -101,11 +100,6 @@ public class MemberController {
 				
 			}
 			
-			
-		} catch (Exception e) {
-			log.info("로그인 중 예외 발생");
-			e.printStackTrace();
-		}
 		
 		return "redirect:/"; // 메인페이지 재요청
 	}
