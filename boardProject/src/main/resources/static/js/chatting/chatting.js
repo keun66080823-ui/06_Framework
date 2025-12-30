@@ -58,7 +58,7 @@ targetInput.addEventListener("input", e => {
 				// li요소 생성(한 행을 감싸는 요소)
 				const li = document.createElement("li");
 				li.classList.add("result-row");
-				li.setAttribute("data-id", member.memberNo);
+				li.setAttribute("data-id", member.memberNo); // 채팅 대상 회원번호를 넣음
 
 				// 프로필 이미지 요소
 				const img = document.createElement("img");
@@ -71,7 +71,7 @@ targetInput.addEventListener("input", e => {
 				let nickname = member.memberNickname;
 				let email = member.memberEmail;
 
-				const span = document.createElement("span");
+				const span = document.createElement("span"); // 검색 시 검색 내용과 일치하는 부분을 형광 마크로 비동기 표시
 				span.innerHTML = `${nickname} ${email}`.replace(query, `<mark>${query}</mark>`);
 
 				// 요소 조립(화면에 추가)
@@ -171,7 +171,7 @@ function selectRoomList(){
 
 			const targetName = document.createElement("span");
 			targetName.classList.add("target-name");
-			targetName.innerText = room.targetNickName;
+			targetName.innerText = room.targetNickname;
 			
 			const recentSendTime = document.createElement("span");
 			recentSendTime.classList.add("recent-send-time");
