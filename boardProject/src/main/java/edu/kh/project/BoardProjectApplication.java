@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling // 스프링 스케줄러를 이용하기 위한 활성화 어노테이션
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class}) 
-// 위 괄호 내 코드는 Spring Security에서 기본제공하는 로그인 페이지를 이용 안하겠다는 의미다.
+// Spring Security에서 기본제공하는 로그인 페이지를 이용 안하겠다
 public class BoardProjectApplication {
 
 	public static void main(String[] args) {

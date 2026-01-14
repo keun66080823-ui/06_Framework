@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 
 /*
- * AOP(Aspect-Oriented Programming) 분산되어 있는 관심사/관점을 모듈화 시키는 기법 
+ * AOP(Aspect-Oriented Programming) 분산되어 있는 관심사/관점을 모듈화 시키는 기법
  * - 주요 비즈니스 로직과 관련이 없는 부가적인 기능을 추가할 때 유용
  * ex) 코드 중간중간 로그 찍을 때, 트랜잭션 처리하고 싶을 때, 보안 처리 추가 등..
  * 
@@ -21,25 +21,25 @@ import lombok.extern.slf4j.Slf4j;
  * 
  * */
 
-@Component // 메서드가 아닌 클래스를 bean으로 등록하는 어노테이션
-@Aspect // 공통 관심사가 작성된 클래스임을 명시(AOP 동작용 클래스)
+@Component // bean 등록
+//@Aspect // 공통 관심사가 작성된 클래스임을 명시(AOP 동작용 클래스)
 @Slf4j // log찍을 수 있는 객체(Logger) 생성 코드를 추가
 public class TestAspect {
-	
+
 	// Advice : 끼워 넣을 코드(메서드)
-	// Pointcut : 실제로 Advice가 적용될 Joinpoint 지정
+	// Pointcut : 실제로 Advice가 적용될 Joinpoint 지정 
 	// * 클래스명은 패키지명부터 모두 작성
 	
 	// execution(* edu.kh.project..*Controller*.*(..))
 	// execution : 메서드 실행 지점을 가리키는 키워드
 	// * : 모든 리턴 타입을 나타냄
 	// edu.kh.project : 패키지명을 나타냄
-	// .. : 0개 이상의 하위 패키지를 나타냄
+	// .. : 0개 이상의 하위 패키지 나타냄
 	// *Controller* : 이름에 "Controller" 라는 문자열을 포함하는 모든 클래스를 대상으로 함
-	// .* : 모든 메서드
+	// .* : 모든 메서드를 나타냄
 	// (..) : 0개 이상의 파라미터를 나타냄
 	
-	@Before("execution(* edu.kh.project..*Controller*.*(..))") // 포인트컷
+	@Before("execution(* edu.kh.project..*Controller*.*(..))")
 	public void testAdvice() {
 		log.info("---------------testAdvice() 수행됨---------------");
 	}
@@ -53,9 +53,15 @@ public class TestAspect {
 				// ex)MainController, MemberController...
 		
 		// 실행된 컨트롤러의 메서드명 얻어오기
-		String methodName = jp.getSignature().getName(); // ex) mainPage(), login.. 만 딱 넘어옴
+		String methodName = jp.getSignature().getName(); // ex) mainPage(), login..
 		
-		log.info("-------------{}.{} 수행완료---------------", className, methodName);
+		log.info("--------------{}.{} 수행완료--------------", className, methodName);
 		
 	}
+	
+	
+	
+	
+	
+	
 }

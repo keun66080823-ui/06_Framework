@@ -15,7 +15,7 @@ public interface EditBoardMapper {
 	 * @param inputBoard
 	 * @return
 	 */
-	int boardInsert(Board inputBoard); // 제목, 내용, 회원번호, 게시판코드번호, 게시글번호
+	int boardInsert(Board inputBoard);
 
 	/** 게시글 이미지 모두 삽입 SQL 수행
 	 * @param uploadList
@@ -23,7 +23,7 @@ public interface EditBoardMapper {
 	 */
 	int insertUploadList(List<BoardImg> uploadList);
 
-	/** 게시글 부분 수정 SQL(제목/내용)
+	/** 게시글 부분 수정 SQL (제목/내용)
 	 * @param inputBoard
 	 * @return
 	 */
@@ -47,11 +47,11 @@ public interface EditBoardMapper {
 	 */
 	int insertImage(BoardImg img);
 
-	/** 게시글 삭제 SQL
+	/** 게시글 삭제
 	 * @param map
 	 * @return
 	 */
-	int boardDelete(Map<String, Object> map);
+	int boardDelete(Map<String, Integer> map);
 
 	
 	
@@ -59,6 +59,4 @@ public interface EditBoardMapper {
 	
 	
 	
-	
-
 }

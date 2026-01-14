@@ -12,13 +12,13 @@ public interface MemberMapper {
 
 	/** 로그인 SQL 실행
 	 * @param memberEmail
-	 * @return login
+	 * @return loginMember
 	 */
-	Member login(String memberEmail);
+	Member login(String memberEmail) throws Exception;
 
-	/** 이메일 중복 검사 SQLs 실행
+	/** 이메일 중복 검사 SQL 실행
 	 * @param memberEmail
-	 * @return
+	 * @return count
 	 */
 	int checkEmail(String memberEmail);
 
@@ -35,7 +35,7 @@ public interface MemberMapper {
 	int signup(Member inputMember);
 
 	/** 회원 목록 조회(비동기)
-	 * @return
+	 * @return memberList
 	 */
 	List<Member> selectMemberList();
 
@@ -46,9 +46,12 @@ public interface MemberMapper {
 	int resetPw(Map<String, Object> map);
 
 	/** 탈퇴 회원 복구(비동기)
-	 * @param inputNo
+	 * @param inputNo 
 	 * @return
 	 */
 	int restoreMember(int inputNo);
-
+	
+	
+	
+	
 }

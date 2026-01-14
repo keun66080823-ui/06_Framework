@@ -12,7 +12,7 @@ import lombok.Setter;
 // - DB에 조회된 결과 또는 SQL 구문에 사용할 값을 전달하는 용도
 // - 관련성 있는 데이터를 한번에 묶어서 다룸
 
-@Data
+@Data 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

@@ -29,23 +29,23 @@ public class LoginFilter implements Filter{
 						ServletResponse response, 
 						FilterChain chain) throws IOException, ServletException {
 		
-		// ServletRequest : HttpServletRequest의 부모타입
-		// ServletResponse : HttpServletResponse의 부모타입
+		// ServletRequest : HttpServletRequest 의 부모타입
+		// ServletResponse : HttpServletResponse 의 부모타입
 		
-		// session 이 필요함 -> 왜 필요한가? -> loginMember가 session에 담기기 때문
+		// session 이 필요함 -> 왜? -> loginMember가 session에 담김
 		
-		// HttpServletRequset 형태(자식형태)로 다운캐스팅
+		// HttpServletRequest 형태(자식형태)로 다운캐스팅
 		HttpServletRequest req = (HttpServletRequest)request;
 		// HttpServletResponse 형태(자식형태)로 다운캐스팅
 		HttpServletResponse resp = (HttpServletResponse)response;
 		
 		// 현재 요청의 URI 를 가져옴
-		String path = req.getRequestURI(); // /myPage/profile 과 같이 요청 주소가 들어옴
+		String path = req.getRequestURI();
 		
-		// 요청 URI 가 "/myPage/profile" 로 시작하는지 확인
+		// 요청 URI 가 "/myPage/profile/" 로 시작하는지 확인
 		if(path.startsWith("/myPage/profile/")) {
-			// 필터를 통과하도록 함. (/myPage/profile/ 뒤의 경로는 로그인 여부와 관련이 없기 때문에)
-			// FilterChain : 다음 필터 또는 DispatcherServlet과 연결된 객체 
+			// 필터를 통과하도록 함
+			// FilterChain : 다음 필터 또는 DispatcherServlet과 연결된 객체
 			chain.doFilter(request, response);
 			// 필터를 통과한 후 return
 			return;
@@ -59,19 +59,16 @@ public class LoginFilter implements Filter{
 		if( session.getAttribute("loginMember") == null ) {
 			// -> 로그인이 되어있지 않은 상태
 			
-			// 	/loginError 재요청 (redirect)
+			// /loginError 재요청 (redirect)
 			resp.sendRedirect("/loginError");
 			
 		} else {
 			// -> 로그인이 되어 있는 상태
 			
-			// 다음 필터로, 또는 다음필터 없다면 DispatcherServlet으로 요청, 응답 전달
+			// 다음 필터로, 또는 다음필터 없다면 DispatcherServlet으로 요청,응답 전달
 			chain.doFilter(request, response);
 			
 		}
-		
-		
-		
 		
 	}
 	

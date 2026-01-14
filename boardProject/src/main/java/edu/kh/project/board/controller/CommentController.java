@@ -13,15 +13,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.kh.project.board.model.dto.Comment;
-import edu.kh.project.board.model.service.BoardService;
 import edu.kh.project.board.model.service.CommentService;
 
-// @Controller (Controller:요청/응답 제어 명시 + Bean 등록)
-//   + @ResponseBody (응답 본문으로 응답데이터 자체를 반환)
+//@Controller (Controller:요청/응답 제어 명시 + Bean 등록)
+//  + @ResponseBody (응답 본문으로 응답데이터 자체를 반환)
 
 // -> @RestController 는 모든 요청에 대한 응답을 응답 본문으로 반환하는 컨트롤러
+
 @RestController // REST API 구축을 위해서 사용하는 컨트롤러
-@RequestMapping("comment") //  /comment로 시작하는 모든 요청 매핑
+@RequestMapping("comment") // /comment로 시작하는 모든 요청 매핑
 public class CommentController {
 	
 	@Autowired
@@ -37,7 +37,7 @@ public class CommentController {
 	}
 	
 	/** 댓글/답글 등록
-	 * + 답글일 때는 parentCommentNo 포함
+	 *  + 답글일 때는 parentCommentNo 포함
 	 * 
 	 * @return
 	 */
@@ -61,5 +61,9 @@ public class CommentController {
 	public int update(@RequestBody Comment comment) {
 		return service.update(comment);
 	}
+	
+	
+	
+	
 	
 }

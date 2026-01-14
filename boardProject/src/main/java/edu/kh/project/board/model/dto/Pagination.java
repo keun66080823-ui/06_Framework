@@ -1,8 +1,8 @@
 package edu.kh.project.board.model.dto;
 
-/* Pagination 뜻 : 목록을 일정 페이지로 분할해서 
+/* Pagination 뜻 : 목록을 일정 페이지로 분할해서
  * 					원하는 페이지를 볼 수 있게 하는 것
- * 					== 페이징 처리
+ *   				== 페이징 처리
  * 
  * Pagination 객체 : 페이징 처리에 필요한 값을 모아두고, 계산하는 객체
  * */
@@ -22,7 +22,7 @@ public class Pagination {
 	private int prevPage;			// 이전 페이지 모음의 마지막 번호
 	private int nextPage;			// 다음 페이지 모음의 시작 번호
 	
-	// 기본 생성자 X (필요 없음) -> 매개변수 없인 페이지네이션 계산이 안 됨.
+	// 기본 생성자 X (필요 없음) -> 페이지네이션 계산 X
 	
 	// 2개짜리 생성자(currentPage, listCount)
 	public Pagination(int currentPage, int listCount) {
@@ -108,34 +108,34 @@ public class Pagination {
 				+ ", pageSize=" + pageSize + ", maxPage=" + maxPage + ", startPage=" + startPage + ", endPage="
 				+ endPage + ", prevPage=" + prevPage + ", nextPage=" + nextPage + "]";
 	}
-
+	
 	
 	/** 페이징 처리에 필요한 값을 계산해서
-	 * 필드에 대입하는 메서드
-	 * (startPage, endPage, maxPage, prevPage, nextPage)
+	 *  필드에 대입하는 메서드
+	 *  (startPage, endPage, maxPage, prevPage, nextPage)
 	 */
 	private void calculate() {
 		// maxPage : 최대 페이지 == 마지막 페이지 == 총 페이지 수
 		
 		// 한 페이지에 게시글이 10개(limit)씩 보여질 경우
-		// 게시글 수	95개 -> 10 page
-		// 게시글 수   100개 -> 10 page
-		// 게시글 수   101개 -> 11 page
+		// 게시글 수   95개  -> 10 page
+		// 게시글 수  100개  -> 10 page
+		// 게시글 수  101개  -> 11 page
 		maxPage = (int)Math.ceil( (double)listCount / limit );
 		
 		// startPage : 페이지 번호 목록의 시작 번호
 		
 		// 페이지 번호 목록이 10개(pageSize) 씩 보여지는 경우
-		// pageSize는 10으로 고정되어 있음을 활용.
-		// 현재 페이지가 1 ~ 10 사이일 때 : 1 page
-		// 현재 페이지가 11 ~ 20 사이일 때 : 11 page
-		// 페이지네이션에 보일 시작 페이지 공식
+		
+		// 현재 페이지가  1 ~ 10 :  1 page
+		// 현재 페이지가 11 ~ 20 : 11 page
+		
 		startPage = (currentPage - 1) / pageSize * pageSize + 1;
 		
 		// endPage : 페이지 번호 목록의 끝 번호
-		// 현재 페이지가 	1 ~ 10 : 10 page
-		// 현재 페이지가   11 ~ 20 : 20 page
-		// 현재 페이지가   21 ~ 30 : 30 page
+		// 현재 페이지가  1 ~ 10 : 10 page
+		// 현재 페이지가 11 ~ 20 : 20 page
+		// 현재 페이지가 21 ~ 30 : 30 page
 		
 		endPage = pageSize - 1 + startPage;
 		
@@ -143,25 +143,33 @@ public class Pagination {
 		if(endPage > maxPage) endPage = maxPage;
 		
 		// prevPage : "<" 클릭 시 이동할 페이지 번호
-		//			(이전 페이지 번호 목록 중 마지막 번호)
+		//			(이전 레벨 페이지 번호 목록 중 마지막 번호)
 		
 		if(currentPage <= pageSize) { // 더 이상 이전으로 갈 페이지가 없을 경우
-			prevPage = 1; // 첫 페이지로 이동
+			prevPage = 1;
 			
 		} else {
-			prevPage = startPage - 1; // 이전 페이지의 일의 단위가 0인 곳으로 이동
+			prevPage = startPage - 1;
 			
 		}
 		
 		// nextPage : ">" 클릭 시 이동할 페이지 번호
-		// 			(다음 레벨 페이지 번호 목록 중 시작 번호)
+		//			(다음 레벨 페이지 번호 목록 중 시작 번호)
 		
 		// 더 이상 다음으로 넘어갈 페이지가 없을 경우
 		if(endPage == maxPage) {
-			nextPage = maxPage; // 마지막 페이지로 이동
+			nextPage = maxPage;
 			
 		} else {
-			nextPage = endPage + 1; // 다음 페이지의 일의 단위가 1인 곳으로 이동
+			nextPage = endPage + 1;
+			
 		}
-	}	
+		
+		
+		
+		
+	}
+	
+	
+	
 }

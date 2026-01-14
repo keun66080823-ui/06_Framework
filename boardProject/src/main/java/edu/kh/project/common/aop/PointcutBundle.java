@@ -7,15 +7,15 @@ import org.aspectj.lang.annotation.Pointcut;
 
 public class PointcutBundle {
 	
-	// 작성하지 어려운 Pointcut을 미리 작성해두고
+	// 작성하기 어려운 Pointcut을 미리 작성해두고
 	// 필요한 곳에서 클래스명.메서드명() 으로 호출해서 사용
 	
-	//@Before("execution(* edu.kh.project..*Controller*.*(..))")
-	// == @Before("PointcutBundle.controllerPointCut")
+	// @Before("execution(* edu.kh.project..*Controller*.*(..))")
+	// == @Before("PointcutBundle.controllerPointCut()")
 	
 	
 	@Pointcut("execution(* edu.kh.project..*Controller*.*(..))")
-	public void controllerPointcut() {}
+	public void controllerPointCut() {}
 	
 	@Pointcut("execution(* edu.kh.project..*ServiceImpl*.*(..))")
 	public void serviceImplPointCut() {}

@@ -11,10 +11,11 @@ public interface EmailService {
 	 */
 	String sendEmail(String type, String email);
 
-	/** 입력받은 이메일, 인증번호가 DB에 있는지 조회 서비스
+	/** 입력받은 이메일,인증번호가 DB에 있는지 조회 서비스
 	 * @param map (email, authKey)
 	 * @return
 	 */
 	int checkAuthKey(Map<String, String> map);
+	
 
 }

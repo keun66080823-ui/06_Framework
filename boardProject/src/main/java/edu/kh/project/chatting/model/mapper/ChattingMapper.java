@@ -30,19 +30,19 @@ public interface ChattingMapper {
 	 */
 	int checkChattingRoomNo(Map<String, Integer> map);
 
-	/** 새로운 채팅방 생성 SQL
+	/** 새로운 채팅방 생성 SQL 
 	 * @param map
-	 * @return 생성된 채팅방의 번호
+	 * @return 생성된 채팅방의 번호 
 	 */
 	int createChattingRoom(Map<String, Integer> map);
 
-	/** 메세지 목록 조회 SQL
+	/** 메시지 목록 조회 SQL
 	 * @param integer
 	 * @return
 	 */
 	List<Message> selectMessageList(Object chattingRoomNo);
 
-	/** 채팅 메세지 읽음 처리
+	/** 채팅 메시지 읽음 처리 SQL
 	 * @param paramMap
 	 * @return
 	 */
@@ -53,7 +53,5 @@ public interface ChattingMapper {
 	 * @return
 	 */
 	int insertMessage(Message msg);
-	
-	
 
 }

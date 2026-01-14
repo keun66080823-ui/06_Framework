@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="edu.kh.project.board.model.mapper.EditBoardMapper">
-	
+
 	<!-- 
-		useGeneratedKeys 속성 :
-			DB 내부적으로 생성한 키(시퀀스)를
+		useGeneratedKeys 속성 : 
+			DB 내부적으로 생성한 키(시퀀스)를 
 			전달된 파라미터의 필드로 대입 가능 여부 지정
-		
+	
 		<selectKey> 태그 : INSERT/UPDATE 시 사용할 키(시퀀스)를
 					조회해서 파라미터의 지정된 필드에 대입하는 역할의 태그
 		
 		order 속성 : 메인 SQL이 수행되기 전/후에 selectKey가 수행되도록 지정
-		전 : BEFORE / 후 : AFTER			
+		전 : BEFORE / 후 : AFTER
 		
-		keyProperty 속성 : selectKey 조회 결과를 저장할 파라미터의 필드명
-	-->
-	
+		keyProperty 속성 : selectKey 조회 결과를 저장할 파라미터의 필드명 
+	 -->
+
 	<insert id="boardInsert" useGeneratedKeys="true" parameterType="Board">
 	
 		<selectKey order="BEFORE" resultType="_int" keyProperty="boardNo">
@@ -23,13 +23,13 @@
 		</selectKey>
 		
 		INSERT INTO "BOARD"
-		VALUES(#{boardNo},
+		VALUES(#{boardNo}, 
 				#{boardTitle},
 				#{boardContent},
 				DEFAULT, DEFAULT, DEFAULT, DEFAULT,
 				#{boardCode},
 				#{memberNo}
-		)
+		 )
 	</insert>
 	
 	<!-- 
@@ -54,20 +54,20 @@
 	<insert id="insertUploadList" parameterType="list">
 		INSERT INTO "BOARD_IMG"
 		
-		<foreach collection="list" item="img"
+		<foreach collection="list" item="img" 
 			open="(" close=")" separator=" UNION ">
 			SELECT NEXT_IMG_NO(), 
 			#{img.imgPath}, 
 			#{img.imgOriginalName}, 
 			#{img.imgRename},
-			#{img.imgOrder},
-			#{img.boardNo}
+			#{img.imgOrder}, 
+			#{img.boardNo} 
 			FROM DUAL
 		</foreach>
-	
+		
 	</insert>
 	
-	<!-- 게시글 부분 수정 (제목/내용)  -->
+	<!--  게시글 부분 수정  (제목/내용) -->
 	<update id="boardUpdate">
 		UPDATE "BOARD" SET
 		BOARD_TITLE = #{boardTitle},
@@ -77,7 +77,7 @@
 		AND MEMBER_NO = #{memberNo}
 	</update>
 	
-	<!-- 게시글 이미지 삭제 
+	<!--  게시글 이미지 삭제  
 		#{} : 해당 컬럼 자료형에 맞는 리터럴 변환 ''
 		${} : sql에 값 그대로 추가 ('' 존재 X)
 	-->
@@ -87,7 +87,7 @@
 		AND BOARD_NO = #{boardNo}
 	</delete>
 	
-	<!-- 게시글 이미지 수정 SQL -->
+	<!--  게시글 이미지 수정 SQL -->
 	<update id="updateImage">
 		UPDATE "BOARD_IMG" SET
 		IMG_ORIGINAL_NAME = #{imgOriginalName},
@@ -96,10 +96,10 @@
 		AND IMG_ORDER = #{imgOrder}
 	</update>
 	
-	<!-- 게시글 이미지 삽입 SQL (1행)-->
+	<!-- 게시글 이미지 삽입 SQL (1행)  -->
 	<insert id="insertImage">
 		INSERT INTO "BOARD_IMG"
-		VALUES(NEXT_IMG_NO(),
+		VALUES(NEXT_IMG_NO(), 
 				#{imgPath},
 				#{imgOriginalName},
 				#{imgRename},
@@ -107,15 +107,17 @@
 				#{boardNo})
 	</insert>
 	
-	<!-- 게시글 삭제(GET) SQL-->
+	<!--  게시글 삭제 -->
 	<update id="boardDelete">
 		UPDATE "BOARD" SET
 		BOARD_DEL_FL = 'Y'
-		WHERE BOARD_NO = #{boardNo}
+		WHERE BOARD_CODE = #{boardCode}
+		AND BOARD_NO = #{boardNo}
 		AND MEMBER_NO = #{memberNo}
 	</update>
 	
 	
 	
-	
+
+
 </mapper>

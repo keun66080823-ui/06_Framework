@@ -17,9 +17,12 @@ public interface MyPageService {
 	 */
 	int updateInfo(Member inputMember, String[] memberAddress);
 
-	int changePw(String currentPw, String newPw, int memberNo);
-
-	String selectEncryptedPw(int memberNo);
+	/** 비밀번호 변경 서비스
+	 * @param paramMap
+	 * @param memberNo
+	 * @return
+	 */
+	int changePw(Map<String, Object> paramMap, int memberNo);
 
 	/** 회원 탈퇴 서비스
 	 * @param memberPw
@@ -53,21 +56,24 @@ public interface MyPageService {
 	 * @param memberNo
 	 * @return
 	 */
-	int fileUpload3(List<MultipartFile> aaaList, List<MultipartFile> bbbList, int memberNo) throws Exception;
+	int fileUpload3(List<MultipartFile> aaaList, 
+				List<MultipartFile> bbbList, 
+				int memberNo) throws Exception;
 
 	/** 프로필 이미지 변경 서비스
 	 * @param profileImg
 	 * @param loginMember
 	 * @return
-	 * @throws Exception
 	 */
 	int profile(MultipartFile profileImg, Member loginMember) throws Exception;
-
-	
-
-	
-
 	
 	
-
+	
+	
+	
+	
+	
+	
+	
+	
 }

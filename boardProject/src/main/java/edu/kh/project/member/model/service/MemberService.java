@@ -9,7 +9,6 @@ public interface MemberService {
 	/** 로그인 서비스
 	 * @param inputMember
 	 * @return loginMember
-	 * @throws Exception 
 	 */
 	Member login(Member inputMember) throws Exception;
 
@@ -31,9 +30,10 @@ public interface MemberService {
 	 * @return
 	 */
 	int signup(Member inputMember, String[] memberAddress);
-
+	
+	
 	/** 회원 목록 조회(비동기)
-	 * @return
+	 * @return memberList
 	 */
 	List<Member> selectMemberList();
 
@@ -48,7 +48,6 @@ public interface MemberService {
 	 * @return
 	 */
 	int restoreMember(int inputNo);
-	
 	
 
 }

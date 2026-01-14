@@ -74,7 +74,7 @@
         <a th:if="${path != null}" 
           th:text="${path}"
           th:href="${path}" 
-          download>업로드한 파일</a> <!--이름 클릭 시 다운로드 기능-->
+          download>업로드한 파일</a>
 
         <img th:src="${path}">
         <!-- /myPage/file/파일명.jpg -->
@@ -107,7 +107,7 @@
             2) multiple 속성 이용
           </pre>
 
-          <div> <!-- name 속성이 같음 -->
+          <div>
             1번) type="file" 요소를 여러 개 작성
             <br>
             <input type="file" name="aaa">
@@ -117,7 +117,7 @@
 
           <hr>
 
-          <div> <!-- multiple 속성이 있음 -->
+          <div>
             2번) multiple 사용(드래그 가능)
             <input type="file" name="bbb" multiple>
           </div>

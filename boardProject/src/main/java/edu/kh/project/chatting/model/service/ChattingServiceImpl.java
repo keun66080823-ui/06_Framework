@@ -11,13 +11,15 @@ import edu.kh.project.chatting.model.dto.ChattingRoom;
 import edu.kh.project.chatting.model.dto.Message;
 import edu.kh.project.chatting.model.mapper.ChattingMapper;
 import edu.kh.project.member.model.dto.Member;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class ChattingServiceImpl implements ChattingService {
-
+public class ChattingServiceImpl implements ChattingService{
+	
 	@Autowired
-	private ChattingMapper mapper;
+	private ChattingMapper mapper;	
 	
 	// 채팅방 목록 조회
 	@Override
@@ -31,7 +33,7 @@ public class ChattingServiceImpl implements ChattingService {
 		return mapper.selectTarget(map);
 	}
 	
-	// 채팅방 번호 체크 서비스
+	// 채팅방번호 체크 서비스
 	@Override
 	public int checkChattingRoomNo(Map<String, Integer> map) {
 		return mapper.checkChattingRoomNo(map);
@@ -50,13 +52,13 @@ public class ChattingServiceImpl implements ChattingService {
 		return 0;
 	}
 	
-	// 채팅 메세지 조회 서비스
+	// 채팅 메시지 조회 서비스
 	@Override
 	public List<Message> selectMessageList(Map<String, Object> paramMap) {
 		
 		List<Message> messageList = mapper.selectMessageList(paramMap.get("chattingRoomNo"));
 		
-		if(!messageList.isEmpty()) { // 해당 채팅방에서 나눈 메세지가 있다면
+		if(!messageList.isEmpty()) { // 해당 채팅방에서 나눈 메시지가 있다면
 			int result = mapper.updateReadFlag(paramMap);
 		}
 		

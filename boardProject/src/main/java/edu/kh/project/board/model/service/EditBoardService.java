@@ -27,12 +27,10 @@ public interface EditBoardService {
 	int boardUpdate(Board inputBoard, List<MultipartFile> images, String deleteOrderList)
 		throws Exception;
 
-	/** 게시글 삭제 서비스
+	/** 게시글 삭제
 	 * @param map
 	 * @return
 	 */
-	int boardDelete(Map<String, Object> map);
-
-	
+	int boardDelete(Map<String, Integer> map);
 
 }

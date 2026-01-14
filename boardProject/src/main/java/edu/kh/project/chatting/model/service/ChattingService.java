@@ -21,7 +21,7 @@ public interface ChattingService {
 	 */
 	List<Member> selectTarget(Map<String, Object> map);
 
-	/** 채팅방 번호 체크 서비스
+	/** 채팅방번호 체크 서비스
 	 * @param map
 	 * @return
 	 */

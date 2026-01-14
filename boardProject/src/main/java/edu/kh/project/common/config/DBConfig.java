@@ -73,7 +73,7 @@ public class DBConfig {
 		// spring.datasource.hikari로 시작하는 모든 값이
 		// 자동으로 알맞은 필드에 세팅됨
 
-		return new HikariConfig(); // 설정 구성 정보를 갖고 있는 객체
+		return new HikariConfig();
 	}
 
 	@Bean

@@ -8,13 +8,13 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 /*
  * 스프링 예외 처리 방법 (우선 순위별로 작성)
  * 
- *  1. 메서드에서 직접 처리(try-catch, throws)
+ * 1. 메서드에서 직접 처리(try-catch, throws)
  * 
- *  2. 컨트롤러 클래스에서 클래스 단위로 모아서 처리
- *  ( @ExceptionHandler 어노테이션을 지닌 메서드를 해당 클래스에 작성 )
+ * 2. 컨트롤러 클래스에서 클래스 단위로 모아서 처리
+ * ( @ExceptionHandler 어노테이션을 지닌 메서드를 해당 클래스에 작성 )
  * 
- *  3. 별도 클래스를 만들어 프로젝트 단위로 모아서 처리
- *  ( @ControllerAdvice 어노테이션을 지닌 클래스를 작성)
+ * 3. 별도 클래스를 만들어 프로젝트 단위로 모아서 처리
+ * ( @ControllerAdvice 어노테이션을 지닌 클래스를 작성 )
  * 
  * */
 
@@ -29,17 +29,20 @@ public class ExceptionController {
 	
 	@ExceptionHandler(NoResourceFoundException.class)
 	public String notFound() { // 404 오류
-		return "error/404"; // 타임리프 접두사, 접미사를 제외한 경로
+		return "error/404";
 	}
 	
-	// 프로젝트에서 방생하는 모든 종류의 예외를 500으로 처리
+	// 프로젝트에서 발생하는 모든 종류의 예외를 500으로 처리
 	@ExceptionHandler(Exception.class)
 	public String allExceptionHandler(Model model, Exception e) {
 		
-		e.printStackTrace(); // 컨트롤러에서 매개변수로 받아 printStackTrace를 사용할 수도 있다.
+		e.printStackTrace();
 		model.addAttribute("e", e);
 		
 		return "error/500";
 	}
+	
+	
+	
 	
 }

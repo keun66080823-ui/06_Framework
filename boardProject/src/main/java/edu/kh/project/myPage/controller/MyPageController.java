@@ -19,12 +19,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.kh.project.member.model.dto.Member;
 import edu.kh.project.myPage.model.dto.UploadFile;
 import edu.kh.project.myPage.model.service.MyPageService;
+import edu.kh.project.myPage.model.service.MyPageServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 
 /*
- * @SessionAttributes의 역할
+ * @SessionAttributes 의 역할
  * - Model에 추가된 속성 중 key 값이 일치하는 속성을 session scope로 변경하는 어노테이션
- * - 클래스 상단에 @SessionAttributes({"loginMember"})
+ * - 클래스 상단에 @SessionAttributes({"loginMember"}) 작성
  * 
  * @SessionAttribute 의 역할
  * - @SessionAttributes를 통해 session에 등록된 속성을 꺼내올 때 사용하는 어노테이션
@@ -46,28 +47,28 @@ public class MyPageController {
 	 * @param loginMember : 세션에 존재하는 loginMember를 얻어와 Member타입 매개변수 대입
 	 * @return
 	 */
-	@GetMapping("info") //	/myPage/info GET 방식 요청 매핑
+	@GetMapping("info") //  /myPage/info GET 방식 요청 매핑
 	public String info(@SessionAttribute("loginMember") Member loginMember, 
-						Model model) { //@SessionAttributes를 통해 key를 뽑아옴
+						Model model) {
 		
 		// 현재 로그인한 회원의 주소를 꺼내옴
 		// 현재 로그인한 회원 정보 -> session scope에 등록된 상태(loginMember)
 		// loginMember(memberAddress도 포함)
 		// -> 만약 회원가입 당시 주소를 입력했다면 주소값 문자열(^^^ 구분자로 만들어진 문자열)
-		// ->	   회원가입 당시 주소를 입력하지 않았다면 null
+		// ->      회원가입 당시 주소를 입력하지 않았다면 null
 		
 		String memberAddress = loginMember.getMemberAddress();
-		// 04540^^^서울 중구 남대문로 120^^^3층 e클래스
-		// 혹은 null
+		// 03189^^^서울 종로구 우정국로2길 21^^^3층, 302클래스 (대왕빌딩)
+		// or null
 		
 		if(memberAddress != null) { // 주소가 있을 경우에만 동작
 			// 구분자 "^^^" 를 기준으로
-			// memberAddress 값을 쪼개어 String[]로 반환
-			String[] arr = memberAddress.split("\\^\\^\\^"); // split은 괄호 내 내용을 정규표현식으로 해석한다. 따라서 일반 문자열로 인식하기 위해선 이스케이프(\) 가 필요하다.
-			// ["04540", "서울 중구 남대문로 120", "3층 e클래스"]
+			// memberAddress 값을 쪼개어 String[] 로 반환
+			String[] arr = memberAddress.split("\\^\\^\\^");
+			// ["03189", "서울 종로구 우정국로2길 21", "3층, 302클래스 (대왕빌딩)"]
 			
 			model.addAttribute("postcode", arr[0]); // 우편주소
-			model.addAttribute("address",  arr[1]); // 도로명/지번주소 
+			model.addAttribute("address",  arr[1]); // 도로명/지번주소
 			model.addAttribute("detailAddress", arr[2]); // 상세주소
 			
 		}
@@ -75,33 +76,33 @@ public class MyPageController {
 		
 		return "myPage/myPage-info";
 	}
-
+	
 	// 프로필 이미지 변경 화면 이동
-	@GetMapping("profile") // 	/myPage/profile GET 방식 요청 매핑
+	@GetMapping("profile") //  /myPage/profile GET 방식 요청 매핑
 	public String profile() {
 		return "myPage/myPage-profile";
 	}
 	
-	// 비밀번호 변경 화면으로 이동
-	@GetMapping("changePw") //	/myPage/changePw GET 방식 요청 매핑
+	// 비밀번호 변경 화면 이동
+	@GetMapping("changePw") //  /myPage/changePw GET 방식 요청 매핑
 	public String changePw() {
 		return "myPage/myPage-changePw";
 	}
 	
 	// 회원 탈퇴 화면 이동
-	@GetMapping("secession") //	 /myPage/secession GET 방식 요청 매핑
+	@GetMapping("secession") //  /myPage/secession GET 방식 요청 매핑
 	public String secession() {
 		return "myPage/myPage-secession";
 	}
 	
 	// 파일 테스트 화면으로 이동
-	@GetMapping("fileTest") //	/myPage/fileTest GET 방식 요청 매핑
+	@GetMapping("fileTest")  //  /myPage/fileTest  GET 방식 요청 매핑
 	public String fileTest() {
 		return "myPage/myPage-fileTest";
 	}
 	
 	// 파일 목록 조회 화면 이동
-	@GetMapping("fileList") // 	/myPage/fileList GET 방식 요청 매핑
+	@GetMapping("fileList") //   /myPage/fileList  GET 방식 요청 매핑
 	public String fileList(Model model, 
 			@SessionAttribute("loginMember") Member loginMember) {
 		
@@ -116,19 +117,19 @@ public class MyPageController {
 	}
 	
 	
-	/** 회원 정보 수정
-	 * @param inputMember : 커맨드 객체(@ModelAttribute가 생략된 상태)
+	/** 회원 정보 수정 
+	 * @param inputMember : 커맨드 객체(@ModelAttribute가 생략된 상태) 
 	 * 						제출된 memberNickname, memberTel 세팅된 상태
-	 * @param memberAddress : 주소만 따로 배열형태로 얻어옴
+	 * @param memberAddress : 주소만 따로 배열형태로 얻어옴 
 	 * @param loginMember : 로그인한 회원 정보 
 	 * 						(현재 로그인한 회원의 회원번호(PK) 사용할 예정)
 	 * 
 	 * @return
 	 */
-	@PostMapping("info") //	/myPage/info POST 방식 요청 매핑
-	public String updateInfo(Member inputMember, // 수정해야 할 정보를 가지는 객체
+	@PostMapping("info") // /myPage/info POST 방식 요청 매핑
+	public String updateInfo(Member inputMember, 
 							@RequestParam("memberAddress") String[] memberAddress,
-							@SessionAttribute("loginMember") Member loginMember, // 현재 로그인한 회원의 기존 객체
+							@SessionAttribute("loginMember") Member loginMember,
 							RedirectAttributes ra) {
 		
 		// inputMember에 현재 로그인한 회원 번호 추가
@@ -144,10 +145,10 @@ public class MyPageController {
 			message = "회원 정보 수정 성공!!!";
 			
 			// loginMember에 DB상 업데이트된 내용으로 세팅
-			// -> loginMember는 세션에 저장된 로그인한 회원 정보가
-			//	 저장되어있다 (로그인 할 당시의 기존 데이터)
-			// -> loginMember를 수정하면 세션에 저장된 로그인한 회원의
-			//	 정보가 업데이트 된다
+			// -> loginMember는 세션에 저장된 로그인한 회원 정보가 
+			//   저장되어있다 (로그인 할 당시의 기존 데이터)
+			// -> loginMember를 수정하면 세션에 저장된 로그인한 회원의 
+			//   정보가 업데이트 된다
 			// == Session에 있는 회원 정보와 DB 데이터를 동기화
 			
 			loginMember.setMemberNickname( inputMember.getMemberNickname() );
@@ -160,49 +161,50 @@ public class MyPageController {
 		}
 		
 		ra.addFlashAttribute("message", message);
-		
-		return "redirect:info"; // 재요청 경로 : /myPage/info GET 요청(redirect이므로 get방식)
+				
+		return "redirect:info"; // 재요청 경로 : /myPage/info GET 요청
 		
 	}
 	
 	/** 비밀번호 변경
-	 * @param paramMap
-	 * @param loginMember
-	 * @param ra
+	 * @param paramMap : 모든 파라미터를 맵으로 저장
+	 * @param loginMember : 세션에 등록된 현재 로그인한 회원 정보
+	 * @param ra : 리다이렉트시 메시지 전달 역할
 	 * @return
 	 */
-	@PostMapping("changePw") // /myPage/changePw POST 방식 요청 매핑
-	public String changePw(@RequestParam Map<String, String> paramMap,
-							@SessionAttribute("loginMember") Member loginMember,
-							RedirectAttributes ra) {
+	@PostMapping("changePw")    //  /myPage/changePw   POST 요청 매핑
+	public String changePw(@RequestParam Map<String, Object> paramMap,
+						@SessionAttribute("loginMember") Member loginMember,
+						RedirectAttributes ra ) {
+	
+		// 로그인한 회원 번호
+		int memberNo = loginMember.getMemberNo();
 		
-	    String currentPw = paramMap.get("currentPw");
-	    String newPw = paramMap.get("newPw");
-	    String newPwConfirm = paramMap.get("newPwConfirm");
-	    String message = null;
-	    String path = null;
+		// 현재 + 새 (paramMap) + 회원 번호(memberNo)를 서비스로 전달
+		int result = service.changePw(paramMap, memberNo);
+		
+		String path = null;
+		String message = null;
+		
+		if(result > 0) {
+			//변경 성공 시 
+			//메시지 "비밀번호가 변경 되었습니다";
+			//리다이렉트 /myPage/info
+			message = "비밀번호가 변경 되었습니다";
+			path = "/myPage/info";
+			
+		} else {
+			//변경 실패 시
+			//메시지 "현재 비밀번호가 일치하지 않습니다";
+			//리다이렉트 /myPage/changePw
+			message = "현재 비밀번호가 일치하지 않습니다";
+			path = "/myPage/changePw";
+			
+		}
 
-	    int memberNo = loginMember.getMemberNo();
-
-	    // 서비스 호출
-	    int result = service.changePw(currentPw, newPw, memberNo);
-	    
-
-	    if(result > 0) {
-	        message = "비밀번호가 변경되었습니다";
-
-	        // 세션 PW 갱신 (암호화 PW 재조회)
-	        String encryptedPw = service.selectEncryptedPw(memberNo);
-	        loginMember.setMemberPw(encryptedPw);
-
-	        path = "info";
-	    } else {
-	    	message = "현재 비밀번호가 일치하지 않습니다";
-	    	path = "changePw";
-	    }
-
-	    ra.addFlashAttribute("message", message);
-	    return "redirect:"+path;
+		ra.addFlashAttribute("message", message);
+		
+		return "redirect:" + path;
 	}
 	
 	
@@ -210,13 +212,13 @@ public class MyPageController {
 	 * @param memberPw : 제출받은(입력한) 비밀번호
 	 * @param loginMember : 로그인한 회원 정보 저장 객체(세션에서 꺼내옴)
 	 * 						-> 회원번호 필요!(SQL에서 조건으로 사용)
-	 * @param status : @SessionAttribute()와 함께 사용!
+	 * @param status : @SessionAttributes() 와 함께 사용!
 	 * @return
 	 */
-	@PostMapping("secession") // /myPage/secession POST 요청 매핑
-	public String secession(@RequestParam("memberPw") String memberPw,
+	@PostMapping("secession") // /myPage/secession  POST 요청 매핑
+	public String secession(@RequestParam("memberPw") String memberPw, 
 							@SessionAttribute("loginMember") Member loginMember,
-							SessionStatus status,
+							SessionStatus status, 
 							RedirectAttributes ra) {
 		
 		// 로그인한 회원의 회원번호 꺼내오기
@@ -236,11 +238,10 @@ public class MyPageController {
 			
 		} else {
 			
-			message = "비밀번호가 일치하지 않습니다";
+			message = "비밀번호 일치하지 않습니다";
 			path = "secession";
 			
 		}
-		
 		
 		// 탈퇴 성공 - 메인페이지 재요청
 		// 탈퇴 실패 - 탈퇴 페이지로 재요청
@@ -250,27 +251,27 @@ public class MyPageController {
 	}
 	
 	/*
-	 * Spring에서 파일을 처리하는 방법 
+	 * Spring에서 파일을 처리하는 방법
 	 * 
 	 * - enctype="multipart/form-data" 로 클라이언트의 요청을 받으면
 	 *   (문자, 숫자, 파일 등이 섞여있는 요청)
 	 * 
-	 *  이를 MultipartResolver(FileConfig에 정의)를 이용해서
-	 *  섞여있는 파라미터를 분리하는 작업을 함
-	 *  
-	 *  문자열, 숫자 -> String
-	 *  파일		 -> MultipartFile
-	 *  
+	 *   이를 MultipartResolver(FileConfig에 정의)를 이용해서
+	 *   섞여있는 파라미터를 분리 작업을 함
+	 *   
+	 *   문자열, 숫자 -> String
+	 *   파일         -> MultipartFile
+	 * 	 
 	 * 
 	 * */
 	
-	@PostMapping("file/test1") //	/myPage/file/test1 POST 요청 매핑
+	@PostMapping("file/test1")  //  /myPage/file/test1  POST 요청 매핑
 	public String fileUpload1(@RequestParam("uploadFile") MultipartFile uploadFile,
 							RedirectAttributes ra) {
 		
 		try {
 			String path = service.fileUpload1(uploadFile);
-			// //myPage/file/파일명.jpg
+			// /myPage/file/파일명.jpg
 			
 			// 파일이 실제로 서버 컴퓨터에 저장이 되어
 			// 웹에서 접근할 수 있는 경로가 반환되었을 때
@@ -286,7 +287,7 @@ public class MyPageController {
 		return "redirect:/myPage/fileTest";
 	}
 	
-	@PostMapping("file/test2") // /myPage/file/test2 POST 요청 매핑
+	@PostMapping("file/test2")  // /myPage/file/test2 POST 요청 매핑
 	public String fileUpload2(@RequestParam("uploadFile") MultipartFile uploadFile, 
 							@SessionAttribute("loginMember") Member loginMember,
 							RedirectAttributes ra) {
@@ -312,27 +313,27 @@ public class MyPageController {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.info("파일 업로드 테스트2 중 예외 발생");
+			log.info("파일 업로드 테스트2 중 예외발생");
 		}
 		
 		return "redirect:/myPage/fileTest";
 	}
 	
 	@PostMapping("file/test3") // /myPage/file/test3 POST 요청 매핑
-	public String fileUpload3(@RequestParam("aaa") List<MultipartFile> aaaList,
+	public String fileUpload3(@RequestParam("aaa") List<MultipartFile> aaaList, 
 							@RequestParam("bbb") List<MultipartFile> bbbList,
 							@SessionAttribute("loginMember") Member loginMember,
-							RedirectAttributes ra) throws Exception{
+							RedirectAttributes ra) throws Exception {
 		
 		// aaa 파일 미제출 시
 		// 0번, 1번 인덱스로 구성 - 파일은 모두 비어있음
-		//log.debug("aaaList: "+ aaaList); // console창에 [요소, 요소] 로 나옴
+		//log.debug("aaaList: "+ aaaList); // [요소, 요소]
 		
 		// bbb(multiple) 파일 미제출 시
 		// 0번 인덱스로 구성 - 파일이 비어있음
 		//log.debug("bbbList: "+ bbbList); // [요소]
 		
-		// 여러 파일을 업로드 할 수 있는 서비스 호출
+		// 여러 파일 업로드 서비스 호출
 		
 		int result = service.fileUpload3(aaaList, bbbList, loginMember.getMemberNo());
 		
@@ -353,13 +354,13 @@ public class MyPageController {
 		return "redirect:/myPage/fileTest";
 	}
 	
-	@PostMapping("profile") //	/myPage/profile POST 요청 매핑
+	@PostMapping("profile") // /myPage/profile POST 요청 매핑
 	public String profile(@RequestParam("profileImg") MultipartFile profileImg,
 						@SessionAttribute("loginMember") Member loginMember,
 						RedirectAttributes ra) throws Exception {
 		
 		// 서비스 호출
-		int result = service.profile(profileImg, loginMember); // 타 메서드와 달리 memberNo만 보내는 게 아니라 loginMember 전체를 보냄
+		int result = service.profile(profileImg, loginMember);
 		
 		String message = null;
 		
@@ -371,7 +372,7 @@ public class MyPageController {
 		
 		ra.addFlashAttribute("message", message);
 		
-		return "redirect:profile"; // 상대경로로 리다이렉트 - /myPage/profile GET 요청
+		return "redirect:profile"; // 리다이렉트 - /myPage/profile GET 요청
 	}
 	
 	

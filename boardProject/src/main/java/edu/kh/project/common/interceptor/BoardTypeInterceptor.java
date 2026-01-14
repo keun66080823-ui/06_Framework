@@ -17,15 +17,15 @@ import lombok.extern.slf4j.Slf4j;
  * Interceptor : 요청/응답/뷰 완성 후 가로채는 객체 (Spring 지원)
  * 
  * * HandlerInterceptor 인터페이스를 상속받아서 구현해야 한다
- * - preHandle(전처리)	: DispatcherServlet -> Controller 사이 수행
- * - postHandle(후처리) : Controller -> DispatcherServlet 사이 수행
+ * - preHandle(전처리)  : DispatcherServlet -> Controller 사이 수행
+ * - postHandle(후처리) : Controller -> DispatcherServlet 사이 수행 
  * - afterCompletion (뷰 완성 후) : ViewResolver -> DispatcherServlet 사이 수행
  * 
  * */
 @Slf4j
-public class BoardTypeInterceptor implements HandlerInterceptor {
-
-	@Autowired // 의존성 주입(DI)
+public class BoardTypeInterceptor implements HandlerInterceptor{
+	
+	@Autowired // 의존성 주입(DI) 
 				// -> BoardService타입이거나 상속관계인 객체(Bean) 주입
 	private BoardService service;
 	
@@ -39,9 +39,9 @@ public class BoardTypeInterceptor implements HandlerInterceptor {
 		// boardTypeList 형태로 가져오기
 		// application scope : 
 		// - 서버 시작 ~ 종료 시 까지 유지되는 Servlet 내장 객체
-		// - 서버 내에 딱 한개만 존재! --> 모든 클라이언트가 공용으로 사용
+		// - 서버 내에 딱 한 개만 존재! --> 모든 클라이언트가 공용으로 사용
 		
-		// application scope 객체 얻어오기(세션 안 됨)
+		// application scope 객체 얻어오기
 		ServletContext application = request.getServletContext();
 		
 		// application scope에 "boardTypeList"가 없을 경우
@@ -78,7 +78,5 @@ public class BoardTypeInterceptor implements HandlerInterceptor {
 	}
 	
 	
-	
-	
-	
+
 }

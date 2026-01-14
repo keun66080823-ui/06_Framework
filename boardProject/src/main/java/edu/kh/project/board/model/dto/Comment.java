@@ -19,7 +19,6 @@ public class Comment {
 	private int parentCommentNo;
 	
 	// 댓글 조회 시 MEMBER 테이블과 JOIN해서 가져올 데이터 담을 필드
-	private String profileImg;	   // 회원 프로필
+	private String profileImg; // 회원 프로필
 	private String memberNickname; // 닉네임
-	
 }

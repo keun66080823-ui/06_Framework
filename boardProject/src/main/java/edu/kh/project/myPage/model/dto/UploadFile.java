@@ -6,8 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor// 기본생성자
-@AllArgsConstructor // 매개변수 생성자
+@NoArgsConstructor  // 기본생성자
+@AllArgsConstructor // 매개변수생성자
 @Builder
 public class UploadFile {
 	private int fileNo;
@@ -16,8 +16,11 @@ public class UploadFile {
 	private String fileRename;
 	private String fileUploadDate;
 	private int memberNo;
-	// DTO 만들 때 관련된 테이블 컬럼과 반드시 동일하게 만들어야 하는 건 아니다
+	// DTO 만들때 관련된 테이블 컬럼과 반드시 동일하게 만들어야 하는건 아니다
 	// 필요에 의해 필드를 더 추가해도 되고, 또는 삭제해도 된다
 	private String memberNickname;
 	
 }
+
+
+

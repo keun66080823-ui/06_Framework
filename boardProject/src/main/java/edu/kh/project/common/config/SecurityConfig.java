@@ -14,9 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 public class SecurityConfig {
-
+	
 	// BCryptPasswordEncoder : 평문을 BCrypt 패턴을 이용하여 암호화
-	//							평문과 암호화된 문자열을 비교해서
+	//							평문과 암호화된문자열을 비교해서 
 	//							서로 맞는 값인지 판단해줌
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -24,5 +24,5 @@ public class SecurityConfig {
 	}
 	
 	
-	
+
 }

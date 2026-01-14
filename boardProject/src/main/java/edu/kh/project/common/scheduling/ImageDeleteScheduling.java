@@ -13,7 +13,7 @@ import edu.kh.project.board.model.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Component // IOC 관련 : Bean으로 등록해주는 어노테이션
+@Component // IOC 관련 : Bean 등록
 @Slf4j
 @PropertySource("classpath:/config.properties")
 @RequiredArgsConstructor
@@ -27,16 +27,16 @@ public class ImageDeleteScheduling {
 	@Value("${my.board.folder-path}")
 	private String boardFolderPath; // C:/uploadFiles/board/
 	
-	//@Scheduled(cron = "0,30 * * * * *") // 시계 초 단위가 0, 30인 경우 수행
+	//@Scheduled(cron = "0,30 * * * * *") // 시계 초 단위가 0,30 인 경우 수행
 	//@Scheduled(cron = "0 0 * * * *") // 매 시간마다 수행
-	//@Scheduled(cron = "0 0 0 * * *") // 자정마다 수행
-	//@Scheduled(cron = "0 0 12 * * *") // 정오마다 수행
-	//@Scheduled(cron = "0 0 0 1 * *") // 매달 1일마다 수행
+	//@Scheduled(cron = "0 0 0 * * *") // 자정
+	//@Scheduled(cron = "0 0 12 * * *") // 정오
+	//@Scheduled(cron = "0 0 0 1 * *") // 매달 1일
 	
 	@Scheduled(cron = "0 0 0 1 * *")
 	public void scheduling() {
 		log.info("스케줄러 동작!");
-		// DB, 서버 폴더의 이미지 파일 목록 비교 후
+		// DB, 서버 폴더의 파일 목록 비교 후
 		// DB에 없는 서버 이미지 파일 삭제 동작
 		
 		// 1. 서버 폴더의 파일 목록 조회하기
@@ -48,19 +48,19 @@ public class ImageDeleteScheduling {
 		File[] memberArr = memberFolder.listFiles();
 		
 		// 두 배열을 하나로 합침
-		// imageArr 라는 빈 배열을 boardArr과 memberArr의 길이만큼의 크기로 만들기
+		// imageArr 라는 빈 배열을 boardArr과 memberArr의 길이 만큼의 크기로 만들기
 		File[] imageArr = new File[boardArr.length + memberArr.length];
 		
 		// 배열 내용 복사(깊은 복사)
-		// System.arraycopy(복사할배열, 몇번인덱스부터 복사할지,
-		// 새로운배열, 새로운배열의몇번부터넣을지인덱스, 복사를 어디까지 할건지
-		System.arraycopy(memberArr, 0, imageArr, 0,memberArr.length);
+		// System.arraycopy(복사할배열, 몇번인덱스부터복사할지,
+		//	새로운배열, 새로운배열의몇번부터넣을지인덱스, 복사를어디까지할건지)
+		System.arraycopy(memberArr, 0, imageArr, 0, memberArr.length);
 		System.arraycopy(boardArr, 0, imageArr, memberArr.length, boardArr.length);
 		
 		// 배열 -> List 변환(다루기 쉽도록)
 		List<File> serverImageList = Arrays.asList(imageArr);
 		
-		// 2. DB에 있는 이미지 파일 이름만 모두 조회
+		// 2. DB 이미지 파일 이름만 모두 조회
 		List<String> dbImageList = service.selectDbImageList();
 		
 		// 3. 서버, DB 이미지 파일명을 비교하여
@@ -68,7 +68,7 @@ public class ImageDeleteScheduling {
 		
 		if(!serverImageList.isEmpty()) { // 서버에 이미지가 있을 경우
 			
-			for(File serverImage : serverImageList){
+			for(File serverImage : serverImageList) {
 				
 				// File.getName() : 서버 파일 이름
 				// List.indexOf(객체) : 
@@ -79,11 +79,11 @@ public class ImageDeleteScheduling {
 					log.info(serverImage.getName() + " 삭제");
 				}
 			}
-			
+						
 		}
-		
+				
 	}
-	
+
 }
 
 /*
@@ -126,4 +126,7 @@ public class ImageDeleteScheduling {
 * @Scheduled(cron="0 * * * * *") // 모든 0초 마다 -> 매 분마다 실행
 *
 */
+
+
+
 
